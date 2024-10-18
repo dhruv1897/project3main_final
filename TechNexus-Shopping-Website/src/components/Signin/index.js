@@ -25,7 +25,7 @@ export const SignIn = () => {
     return (
         <Container>
             <FormWrap>
-                <Icon to="/">React SPA</Icon>
+                <Icon to="/">Login for Confirm Order</Icon>
                 <FormContent>
                     <Form onSubmit={handleSubmit}> {/* Handle form submission */}
                         <FormH1>Sign in to your account</FormH1>
