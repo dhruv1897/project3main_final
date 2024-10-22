@@ -14,7 +14,7 @@ const OrderConfirmationPage = () => {
       alert('Session expired. You will be logged out.');
       Cookies.remove('fbToken'); // Remove the session token
       history.push('/signin'); // Redirect to the sign-in page
-    }, 60000); // 1 minute = 60000 milliseconds
+    }, 30000); // 1 minute = 60000 milliseconds
 
     return () => clearTimeout(logoutTimer); // Cleanup timer
   }, [history]);
