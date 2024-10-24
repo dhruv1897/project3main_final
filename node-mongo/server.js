@@ -1,37 +1,35 @@
-const express = require('express');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const db = require("./config/db");
+const contactRoutes = require("./routes/contactRoutes");
+const signinRoutes = require("./routes/singinRoutes");
+const hellopage = require("./routes/helloRoutes");
+
+dotenv.config();
+
 const app = express();
-const bodyParser = require('body-parser');
-app.use(bodyParser.json())
 
-require('./app/models/contact.model.js');
-require('./app/models/signin.model.js');
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
 
+// Database connection
+db.connect();
 
-// Configuring the database
-require('dotenv').config();
-const mongoose = require('mongoose');
+// Load routes
+app.use("/api/contacts", contactRoutes);
+app.use("/api/signin", signinRoutes);
+app.use("/", hellopage);
 
-// Connecting to the database 
-mongoose.connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}); 
-
-mongoose.connection
-.on('open', () => {
-    console.log('Mongoose connection open');
-})
-.on('error', (err) => {
-    console.log(`Connection error: ${err.message}`);
+// Default error handling for unhandled routes
+app.use((req, res) => {
+  res.status(404).send("Not Found");
 });
 
-require('./app/routes/contact.router.js')(app);
-require('./app/routes/signin.router.js')(app);
-
 // Create a Server
-const server = app.listen(8080, function () {
-    const host = server.address().address
-    const port = server.address().port
-
-    console.log("App listening at https://%s:%s", host, port)
-})
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`App listening at http://localhost:${PORT}`);
+});
